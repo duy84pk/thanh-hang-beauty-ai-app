@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_URL = import.meta.env.VITE_API_URL || 'https://thanh-hang-beauty-ai-app.onrender.com';
 const BASE_API = `${API_URL}/api/v1`;
 
 // --- CÁC API VỀ XỬ LÝ ẢNH & AI ---
