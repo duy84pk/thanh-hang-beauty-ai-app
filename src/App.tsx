@@ -200,7 +200,7 @@ export default function App() {
       const gender = (state.customerData as any)?.gender || 'Nu';
       const dob = (state.customerData as any)?.dob || '';
 
-      const response = await fetch('http://localhost:8000/api/v1/analyze-face', {
+      const response = await fetch('https://thanh-hang-beauty-ai-app.onrender.com/api/v1/analyze-face', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ facialMetrics: facialMetricsRaw, gender: gender, dob: dob })
