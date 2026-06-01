@@ -1,0 +1,10 @@
+{
+  "name": "Thanh Hằng Beauty - AI Face Analysis",
+  "description": "Luxury beauty and feng shui face analysis application using AI.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

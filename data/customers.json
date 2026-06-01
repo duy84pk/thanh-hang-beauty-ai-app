@@ -1,0 +1,84 @@
+[
+    {
+        "fullName": "Duy",
+        "phone": "0828387868",
+        "gender": "Nam",
+        "dob": "1984-05-30",
+        "advisedServices": [
+            "Lông mày",
+            "Môi"
+        ],
+        "id": "1780146461356",
+        "date": "30/05/2026",
+        "isCalled": false,
+        "isBirthdayWished": false
+    },
+    {
+        "fullName": "Hằng",
+        "phone": "0937576836",
+        "gender": "Nu",
+        "dob": "1979-03-04",
+        "advisedServices": [
+            "Lông mày",
+            "Môi"
+        ],
+        "id": "1780147893657",
+        "date": "30/05/2026",
+        "isCalled": true,
+        "isBirthdayWished": false
+    },
+    {
+        "fullName": "Lan",
+        "phone": "09375867583",
+        "gender": "Nu",
+        "dob": "1977-07-27",
+        "advisedServices": [
+            "Lông mày",
+            "Môi"
+        ],
+        "id": "1780159588294",
+        "date": "30/05/2026",
+        "isCalled": false,
+        "isBirthdayWished": false
+    },
+    {
+        "fullName": "Linh",
+        "phone": "0946859123",
+        "gender": "Nu",
+        "dob": "1980-01-30",
+        "advisedServices": [
+            "Lông mày",
+            "Môi"
+        ],
+        "id": "1780189947675",
+        "date": "31/05/2026",
+        "isCalled": false,
+        "isBirthdayWished": false
+    },
+    {
+        "fullName": "Ly",
+        "phone": "0987654321",
+        "gender": "Nu",
+        "dob": "1988-08-08",
+        "advisedServices": [
+            "Combo Điêu khắc Mày Hairstroke rải hạt & Phun môi vi chạm"
+        ],
+        "id": "1780306148642",
+        "date": "01/06/2026",
+        "isCalled": false,
+        "isBirthdayWished": false
+    },
+    {
+        "fullName": "Oanh",
+        "phone": "0123456789",
+        "gender": "Nu",
+        "dob": "1968-11-11",
+        "advisedServices": [
+            "Combo Điêu khắc Mày Hairstroke rải hạt & Phun môi vi chạm"
+        ],
+        "id": "1780306349761",
+        "date": "01/06/2026",
+        "isCalled": false,
+        "isBirthdayWished": false
+    }
+]

@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-serif: "Playfair Display", serif;
+  --color-gold: #c9a84c;
+  --color-gold-light: #e8d48b;
+  --color-gold-dark: #8a6a1f;
+  --color-bg-dark: #0a0a0a;
+  
+  --background-image-gold-gradient: linear-gradient(135deg, #8a6a1f 0%, #c9a84c 50%, #e8d48b 100%);
+  --background-image-btn-gradient: linear-gradient(to right, #c9a84c, #e8d48b, #c9a84c);
+}
+
+@layer base {
+  body {
+    @apply bg-bg-dark text-white font-sans antialiased;
+  }
+}
+
+.gold-gradient {
+  background: var(--background-image-gold-gradient);
+}
+
+.gold-border {
+  border: 2px solid #c9a84c;
+}
+
+.gold-text {
+  color: #c9a84c;
+}
+
+.gold-shadow {
+  box-shadow: 0 0 25px rgba(201, 168, 76, 0.2);
+}
+
+.btn-gold {
+  background: var(--background-image-btn-gradient);
+  @apply text-[#1a1a1a] font-bold py-3 px-6 rounded-lg shadow-[0_4px_15px_rgba(201,168,76,0.4)] uppercase tracking-[1px] transition-all hover:scale-105 active:scale-95 cursor-pointer border-none;
+}
+
+.card {
+  @apply bg-white rounded-xl text-[#1a1a1a];
+  border: 2px solid #c9a84c;
+  box-shadow: 0 0 25px rgba(201, 168, 76, 0.2);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #c9a84c;
+  border-radius: 10px;
+}
+
