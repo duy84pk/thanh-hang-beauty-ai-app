@@ -20,22 +20,35 @@ const cropImageToPortrait = (base64Str: string, targetAspect = 3 / 4): Promise<s
     const img = new Image();
     img.src = base64Str;
     img.onload = () => {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
       let srcWidth = img.width;
       let srcHeight = img.height;
       let targetWidth = srcWidth;
       let targetHeight = srcWidth / targetAspect;
+      
       if (targetHeight > srcHeight) {
         targetHeight = srcHeight;
         targetWidth = srcHeight * targetAspect;
       }
-      canvas.width = targetWidth;
-      canvas.height = targetHeight;
+
+      // Tối ưu hóa: Giới hạn độ phân giải để chống tràn RAM trên điện thoại
+      const MAX_WIDTH = 800;
+      let finalWidth = targetWidth;
+      let finalHeight = targetHeight;
+      if (targetWidth > MAX_WIDTH) {
+        finalWidth = MAX_WIDTH;
+        finalHeight = MAX_WIDTH / targetAspect;
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = finalWidth;
+      canvas.height = finalHeight;
+      const ctx = canvas.getContext('2d');
+      
       const offsetX = (srcWidth - targetWidth) / 2;
       const offsetY = (srcHeight - targetHeight) / 2;
-      ctx?.drawImage(img, offsetX, offsetY, targetWidth, targetHeight, 0, 0, targetWidth, targetHeight);
-      resolve(canvas.toDataURL('image/jpeg', 0.9));
+      
+      ctx?.drawImage(img, offsetX, offsetY, targetWidth, targetHeight, 0, 0, finalWidth, finalHeight);
+      resolve(canvas.toDataURL('image/jpeg', 0.8));
     };
   });
 };
@@ -181,6 +194,10 @@ export default function App() {
       const img = new Image();
       img.src = (state.capturedImage as unknown as string);
       await new Promise((resolve) => { img.onload = resolve; });
+
+      // Định danh lại kích thước thực tế để điện thoại không bị lỗi MediaPipe
+      img.width = img.naturalWidth;
+      img.height = img.naturalHeight;
 
       const result = faceLandmarker.detect(img);
 
@@ -337,7 +354,23 @@ function Step2FaceScan({ onCapture, capturedImage, onAnalyze, isAnalyzing }: any
   return (
     <div className="max-w-3xl w-full bg-black/50 border border-gold/50 rounded-2xl p-8 mt-4">
       <h2 className="text-2xl font-bold gold-text uppercase text-center mb-6">Quét khuôn mặt</h2>
-      <div className="relative aspect-[3/4] max-w-sm mx-auto bg-black/60 rounded-2xl overflow-hidden mb-6 flex items-center justify-center border-2 border-gold/50">{!capturedImage ? (<><Webcam audio={false} ref={webcamRef} screenshotFormat="image/jpeg" videoConstraints={{ width: { ideal: 1920 }, height: { ideal: 1080 }, facingMode: "user" }} forceScreenshotSourceSize={true} className="absolute inset-0 w-full h-full object-cover scale-x-[-1] opacity-90" /><div className="absolute inset-x-8 inset-y-12 border-2 border-dashed border-gold/60 rounded-[50%] pointer-events-none" /></>) : (<img src={capturedImage} className="w-full h-full object-cover" alt="Captured" />)}</div>
+      <div className="relative aspect-[3/4] max-w-sm mx-auto bg-black/60 rounded-2xl overflow-hidden mb-6 flex items-center justify-center border-2 border-gold/50">
+        {!capturedImage ? (
+          <>
+            <Webcam 
+              audio={false} 
+              ref={webcamRef} 
+              screenshotFormat="image/jpeg" 
+              videoConstraints={{ facingMode: "user", aspectRatio: 0.75 }} 
+              forceScreenshotSourceSize={true} 
+              className="absolute inset-0 w-full h-full object-cover scale-x-[-1] opacity-90" 
+            />
+            <div className="absolute inset-x-8 inset-y-12 border-2 border-dashed border-gold/60 rounded-[50%] pointer-events-none" />
+          </>
+        ) : (
+          <img src={capturedImage} className="w-full h-full object-cover" alt="Captured" />
+        )}
+      </div>
       <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto w-full">{!capturedImage ? (<><button onClick={capture} className="flex-1 btn-gold !h-14 font-black tracking-widest text-xs"><Camera className="inline mr-2" size={18} /> Chụp Màn Hình</button><input type="file" accept="image/*" ref={fileInputRef} className="hidden" onChange={handleFileUpload} /><button onClick={() => fileInputRef.current?.click()} className="flex-1 border-2 border-gold text-gold font-bold h-14 rounded-lg uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-gold/20 text-xs bg-black/40"><Upload size={18} /> Tải Ảnh Lên</button></>) : (<><button onClick={() => onCapture(null)} className="flex-1 py-3 border-2 border-gray-400 text-gray-100 font-bold rounded-lg uppercase hover:border-white hover:text-white bg-black/40">Thử Lại</button><button onClick={onAnalyze} className="flex-[2] btn-gold">Phân Tích AI & Phong Thủy</button></>)}</div>
     </div>
   );
