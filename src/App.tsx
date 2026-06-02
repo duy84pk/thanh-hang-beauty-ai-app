@@ -184,7 +184,7 @@ export default function App() {
       const faceLandmarker = await FaceLandmarker.createFromOptions(vision, {
         baseOptions: {
           modelAssetPath: `https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task`,
-          delegate: "GPU"
+          delegate: "CPU" // Chuyển về CPU để tương thích 100% với mọi trình duyệt di động
         },
         outputFaceBlendshapes: true,
         runningMode: "IMAGE",
