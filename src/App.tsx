@@ -53,7 +53,7 @@ const cropImageToPortrait = (base64Str: string, targetAspect = 3 / 4): Promise<s
   });
 };
 
-// --- HÀM TẠO WATERMARK: TRẢ VỀ BASE64 THAY VÌ TỰ ĐỘNG TẢI ---
+// --- HÀM TẠO WATERMARK: TỰ ĐỘNG CO GIÃN TỶ LỆ CHUẨN ---
 const generateBeforeAfterWithWatermark = async (originalSrc: string, afterSrc: string): Promise<string | null> => {
   try {
     const orig = new Image(); orig.crossOrigin = "anonymous";
@@ -73,43 +73,61 @@ const generateBeforeAfterWithWatermark = async (originalSrc: string, afterSrc: s
     const ctx = canvas.getContext('2d');
     if(!ctx) return null;
 
+    // Vẽ 2 ảnh lên Canvas
     ctx.drawImage(orig, 0, 0, width, height);
     ctx.drawImage(after, width, 0, width, height);
 
-    ctx.font = "bold 60px Arial";
+    // ==========================================
+    // CÔNG THỨC TÍNH TỶ LỆ CO GIÃN ĐỘNG (DYNAMIC)
+    // ==========================================
+    const titleFontSize = Math.max(24, Math.floor(width * 0.055)); // Chữ tiêu đề trên cùng
+    const footerFontSize = Math.max(20, Math.floor(width * 0.045)); // Chữ chân trang
+    const bgFontSize = Math.max(16, Math.floor(width * 0.035));     // Chữ chìm background
+    const paddingX = Math.floor(width * 0.05); // Lề ngang
+    const paddingY = Math.floor(height * 0.05); // Lề dọc
+
+    // 1. Tiêu đề ("ẢNH GỐC" & "AI GIẢ LẬP")
+    ctx.font = `bold ${titleFontSize}px Arial`;
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
     ctx.shadowColor = "rgba(0,0,0,0.8)";
-    ctx.shadowBlur = 15;
+    ctx.shadowBlur = Math.floor(width * 0.015);
     
     ctx.fillStyle = "white";
-    ctx.fillText("ẢNH GỐC", 50, 50);
+    ctx.fillText("ẢNH GỐC", paddingX, paddingY);
     
     ctx.fillStyle = "#c9a84c"; 
-    ctx.fillText("AI GIẢ LẬP", width + 50, 50);
+    ctx.fillText("AI GIẢ LẬP", width + paddingX, paddingY);
 
-    ctx.font = "bold 50px Arial";
+    // 2. Chữ chân trang ("Thanh Hằng Beauty" & "Hotline")
+    ctx.font = `bold ${footerFontSize}px Arial`;
     ctx.textAlign = "center";
     ctx.textBaseline = "bottom";
     
+    const bottomY = height - paddingY + (footerFontSize / 3);
+
     ctx.fillStyle = "#c9a84c";
     ctx.shadowColor = "rgba(0,0,0,0.9)";
-    ctx.shadowBlur = 12;
-    ctx.fillText("Thanh Hằng Beauty", width / 2, height - 40);
+    ctx.shadowBlur = Math.floor(width * 0.012);
+    ctx.fillText("Thanh Hằng Beauty", width / 2, bottomY);
 
+    // Đổ bóng viền nổi cho số Hotline dễ đọc
+    const hotlineX = width + (width / 2);
     ctx.fillStyle = "#111111"; 
     ctx.shadowColor = "rgba(255,255,255,0.7)"; 
-    ctx.shadowBlur = 8;
-    ctx.lineWidth = 3;
+    ctx.shadowBlur = Math.floor(width * 0.008);
+    ctx.lineWidth = Math.max(2, Math.floor(width * 0.003));
     ctx.strokeStyle = "rgba(255,255,255,0.8)"; 
-    ctx.strokeText("Hotline 0985.808.318", width + width / 2, height - 40);
-    ctx.fillText("Hotline 0985.808.318", width + width / 2, height - 40);
+    
+    ctx.strokeText("Hotline 0985.808.318", hotlineX, bottomY);
+    ctx.fillText("Hotline 0985.808.318", hotlineX, bottomY);
 
+    // 3. Chữ chìm chéo toàn màn hình (Background Watermark)
     ctx.shadowBlur = 0; 
     ctx.strokeStyle = "transparent";
-    ctx.globalAlpha = 0.2; 
+    ctx.globalAlpha = 0.15; // Giảm độ mờ xuống 15% để không lấn át ảnh mặt
     ctx.fillStyle = "rgba(255, 255, 255, 1)";
-    ctx.font = "bold 40px Arial";
+    ctx.font = `bold ${bgFontSize}px Arial`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
 
@@ -118,19 +136,20 @@ const generateBeforeAfterWithWatermark = async (originalSrc: string, afterSrc: s
 
     const watermarkText = "Thanh Hằng Beauty - Hotline 0985.808.318";
     const textMetrics = ctx.measureText(watermarkText);
-    const textWidth = textMetrics.width + 120; 
-    const textHeight = 130; 
+    
+    // Khoảng cách các dòng chữ chìm cũng co giãn theo ảnh
+    const repeatSpaceX = textMetrics.width + (width * 0.15); 
+    const repeatSpaceY = bgFontSize * 3.5; 
     const diag = Math.sqrt(canvas.width ** 2 + canvas.height ** 2);
 
-    for (let y = -diag; y < diag; y += textHeight) {
-      const offsetX = (Math.abs(Math.round(y / textHeight)) % 2 === 0) ? 0 : textWidth / 2;
-      for (let x = -diag - offsetX; x < diag; x += textWidth) {
+    for (let y = -diag; y < diag; y += repeatSpaceY) {
+      const offsetX = (Math.abs(Math.round(y / repeatSpaceY)) % 2 === 0) ? 0 : repeatSpaceX / 2;
+      for (let x = -diag - offsetX; x < diag; x += repeatSpaceX) {
         ctx.fillText(watermarkText, x, y);
       }
     }
 
-    // Trả về chuỗi base64 của ảnh thay vì tải xuống
-    return canvas.toDataURL('image/jpeg', 1.0);
+    return canvas.toDataURL('image/jpeg', 0.9);
     
   } catch (error) {
     alert("Có lỗi khi tạo ảnh ghép. Vui lòng thử lại!");
