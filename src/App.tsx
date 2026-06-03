@@ -184,7 +184,7 @@ export default function App() {
       const faceLandmarker = await FaceLandmarker.createFromOptions(vision, {
         baseOptions: {
           modelAssetPath: `https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task`,
-          delegate: "CPU" // Chuyển về CPU để tương thích 100% với mọi trình duyệt di động
+          delegate: "CPU" 
         },
         outputFaceBlendshapes: true,
         runningMode: "IMAGE",
@@ -195,7 +195,6 @@ export default function App() {
       img.src = (state.capturedImage as unknown as string);
       await new Promise((resolve) => { img.onload = resolve; });
 
-      // Định danh lại kích thước thực tế để điện thoại không bị lỗi MediaPipe
       img.width = img.naturalWidth;
       img.height = img.naturalHeight;
 
@@ -455,6 +454,15 @@ function Step3ActionHub({ result, image, customerName, onFinish }: any) {
           Kết Quả Phân Tích & Tư Vấn
         </h2>
         <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-6">
+           
+           {/* KHỐI HIỂN THỊ ĐIỂM SỐ MỚI THÊM VÀO */}
+           <div className="p-6 bg-gold/10 rounded-xl border border-gold/50 text-center">
+             <h3 className="font-bold text-gold mb-2 uppercase text-xs tracking-widest">Điểm Phong Thủy Khuôn Mặt</h3>
+             <div className="text-5xl font-black text-white">
+                 {result.score}<span className="text-2xl text-gray-400 font-medium">/100</span>
+             </div>
+           </div>
+
            <div className="p-5 bg-black/40 rounded-lg border border-gray-600">
              <h3 className="font-bold text-gray-300 mb-2 uppercase text-xs">Đánh giá Nhân tướng:</h3>
              <p className="text-gray-100 text-sm leading-relaxed whitespace-pre-line">{result.analysis}</p>
