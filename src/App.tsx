@@ -498,7 +498,7 @@ function Step3ActionHub({ result, image, customerName, onFinish }: any) {
            </div>
         </div>
         <div className="mt-6 pt-6 border-t border-gold/30 grid grid-cols-2 gap-4">
-          <button onClick={() => window.open('https://gemini.google.com/gem/1gWgRg4ER6YK0oFEh0WlSNbP0FbQwLuUj?usp=sharing', '_blank')} className="py-3 px-4 border border-blue-400 text-blue-400 rounded-lg font-bold flex items-center justify-center gap-2 hover:bg-blue-400/20 text-sm transition-colors">
+          <button onClick={() => window.open('https://grok.com/project/995d15f4-aa62-4528-ae99-5640f270d0e6?tab=conversations', '_blank')} className="py-3 px-4 border border-blue-400 text-blue-400 rounded-lg font-bold flex items-center justify-center gap-2 hover:bg-blue-400/20 text-sm transition-colors">
             <ExternalLink size={18} /> Gọi Trợ Lý AI
           </button>
           
