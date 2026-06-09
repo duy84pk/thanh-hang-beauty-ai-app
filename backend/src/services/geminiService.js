@@ -11,7 +11,7 @@ async function analyzeAndGeneratePrompt(facialMetrics, gender, dob) {
 
     try {
         // LƯU Ý QUAN TRỌNG: Gọi bản 1.5-flash để đảm bảo tốc độ cực nhanh và không bị lỗi quá tải
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash" });
 
         const promptText = `You are an elite Permanent Makeup (PMU) Master and a highly revered expert in Eastern Facial Physiognomy (Bậc thầy Nhân Tướng Học Phương Đông). You are working for Thanh Hằng Beauty.
         Your task is to analyze raw facial metrics and generate a highly structured, mystical, yet utterly convincing feng shui analysis for the client. The goal is to build deep trust and logically upsell PMU services to improve their destiny.
