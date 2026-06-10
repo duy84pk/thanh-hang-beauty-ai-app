@@ -4,14 +4,14 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 /**
- * Gọi Gemini để phân tích text MediaPipe và tạo Prompt
+ * Gọi Gemini 3.1 Flash Lite để phân tích text MediaPipe và tạo Prompt phong thủy
  */
 async function analyzeAndGeneratePrompt(facialMetrics, gender, dob) {
     console.log(`[Gemini AI] Bắt đầu phân tích dữ liệu... Giới tính: ${gender} | Ngày sinh: ${dob}`);
 
     try {
-        // LƯU Ý QUAN TRỌNG: Gọi bản 1.5-flash để đảm bảo tốc độ cực nhanh và không bị lỗi quá tải
-        const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash" });
+        // KHÓA CHẶT PHIÊN BẢN 3.1 FLASH LITE SIÊU ỔN ĐỊNH VÀ MƯỢT MÀ
+        const model = genAI.getGenerativeModel({ model: "gemini-3.1-flash-lite" });
 
         const promptText = `You are an elite Permanent Makeup (PMU) Master and a highly revered expert in Eastern Facial Physiognomy (Bậc thầy Nhân Tướng Học Phương Đông). You are working for Thanh Hằng Beauty.
         Your task is to analyze raw facial metrics and generate a highly structured, mystical, yet utterly convincing feng shui analysis for the client. The goal is to build deep trust and logically upsell PMU services to improve their destiny.
@@ -67,7 +67,7 @@ async function analyzeAndGeneratePrompt(facialMetrics, gender, dob) {
         }
 
         const parsedData = JSON.parse(jsonMatch[0]);
-        console.log("[Gemini AI] => Phân tích thành công!");
+        console.log("[Gemini AI] => Phân tích thành công bằng bản 3.1 Flash Lite!");
         return parsedData;
 
     } catch (error) {
