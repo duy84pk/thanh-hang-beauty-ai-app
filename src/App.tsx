@@ -238,7 +238,12 @@ export default function App() {
       const response = await fetch('https://thanh-hang-beauty-ai-app.onrender.com/api/v1/analyze-face', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ facialMetrics: facialMetricsRaw, gender: gender, dob: dob })
+        body: JSON.stringify({ 
+          facialMetrics: facialMetricsRaw, 
+          gender: gender, 
+          dob: dob,
+          image: state.capturedImage // <--- DÒNG NÀY QUAN TRỌNG NHẤT: GỬI ẢNH CHO AI
+        })
       });
 
       const apiResult = await response.json();

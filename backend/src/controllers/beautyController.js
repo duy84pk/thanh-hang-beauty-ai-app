@@ -6,13 +6,14 @@
 const geminiService = require('../services/geminiService'); 
 
 /**
- * Controller: Nhận số đo khuôn mặt từ MediaPipe, gọi Gemini phân tích và trả về Prompt
- * Route: POST /api/analyze-face
+ * Controller: Nhận số đo khuôn mặt VÀ ẢNH từ Frontend, gọi Gemini phân tích và trả về Prompt
+ * Route: POST /api/v1/analyze-face
  */
 exports.analyzeFaceAndGeneratePrompt = async (req, res) => {
-    console.log("[Controller] Nhận yêu cầu phân tích thông số MediaPipe...");
+    console.log("[Controller] Nhận yêu cầu phân tích dữ liệu...");
     try {
-        const { facialMetrics, gender, dob } = req.body;
+        // 1. Hứng thêm biến image từ Frontend gửi lên
+        const { facialMetrics, gender, dob, image } = req.body;
 
         if (!facialMetrics) {
             return res.status(400).json({ 
@@ -21,8 +22,15 @@ exports.analyzeFaceAndGeneratePrompt = async (req, res) => {
             });
         }
 
-        // Gọi Gemini Service xử lý
-        const result = await geminiService.analyzeAndGeneratePrompt(facialMetrics, gender, dob);
+        // Báo cáo xem đã nhận được ảnh thành công chưa
+        if (image) {
+            console.log("[Controller] Đã nhận được hình ảnh khách hàng để phân tích Đa phương thức!");
+        } else {
+            console.log("[Controller] CẢNH BÁO: Không nhận được hình ảnh đính kèm!");
+        }
+
+        // 2. Truyền biến image vào hàm của Gemini
+        const result = await geminiService.analyzeAndGeneratePrompt(facialMetrics, gender, dob, image);
 
         if (!result) {
             throw new Error("AI không trả về dữ liệu.");

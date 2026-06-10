@@ -8,8 +8,10 @@ const app = express();
 
 // Cấu hình Middleware
 app.use(cors());
-app.use(express.json({ limit: '10mb' })); 
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// TĂNG GIỚI HẠN LÊN 50MB ĐỂ ỨNG DỤNG NHẬN ĐƯỢC ẢNH GỬI LÊN TỪ ĐIỆN THOẠI MÀ KHÔNG BỊ CHẶN
+app.use(express.json({ limit: '50mb' })); 
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // Khai báo Routes
 app.use('/api/v1', apiRoutes);
